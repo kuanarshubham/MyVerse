@@ -983,22 +983,23 @@ describe("Web socket endpoint", () => {
 
     async function setupWS() {
         ws1 = new WebSocket(WS_URL);
-        ws2 = new WebSocket(WS_URL);
 
-        //waits indefinetilty till ws1 and ws2 (one after another) opens 
+        //waits indefinetilty till ws1 opens 
         await new Promise(resolve => {
             ws1.onopen = resolve;
         });
-
-        await new Promise(resolve => {
-            ws2.onopen = resolve;
-        });
-
 
         //since the websocket recives messages faster than the chrome cpu can handle this is why we store the data in a array
         ws1.onmessage = (event) => {
             ws1Messages.push(JSON.parse(event.data));
         }
+
+
+        ws2 = new WebSocket(WS_URL);
+
+        await new Promise(resolve => {
+            ws2.onopen = resolve;
+        });
 
         ws2.onmessage = (event) => {
             ws2Messages.push(JSON.parse(event.data));
@@ -1010,7 +1011,7 @@ describe("Web socket endpoint", () => {
         setupWS();
     });
 
-    test("Get back an ack for joining the space", async()=> {
+    test("Get back an ack for joining the space", async () => {
         ws1.send(JSON.stringify({
             "type": "join",
             "payload": {
@@ -1018,6 +1019,8 @@ describe("Web socket endpoint", () => {
                 "token": adminId
             }
         }));
+
+        const message1 = await waitForAndPopLatestMessage(ws1Messages);
 
         ws2.send(JSON.stringify({
             "type": "join",
@@ -1027,21 +1030,27 @@ describe("Web socket endpoint", () => {
             }
         }));
 
-        const message1 = await waitForAndPopLatestMessage(ws1Messages);
         const message2 = await waitForAndPopLatestMessage(ws2Messages);
+        const message3 = await waitForAndPopLatestMessage(ws1Messages);
 
         expect(message1.type).toBe("space-joined");
         expect(message2.type).toBe("space-joined");
 
-        expect(message1.payload.users.length+message2.payload.users.length).toBe(1);
+        expect(message1.payload.users.length).toBe(0);
+        expect(message1.payload.users.length).toBe(1);
 
         userX = message2.payload.spawn.x;
         userY = message2.payload.spawn.y;
         adminX = message1.payload.spawn.x;
         adminY = message1.payload.spawn.y;
+
+        expect(message3.type).toBe("user-join");
+        expect(message3.payload.x).toBe(userX);
+        expect(message3.payload.y).toBe(userY);
+        expect(message3.payload.userId).toBe(userId);
     });
 
-    test("Movement rejection on moving outside the map", async()=> {
+    test("Movement rejection on moving outside the map", async () => {
         ws1.send(JSON.stringify({
             "type": "move",
             "payload": {
@@ -1057,11 +1066,11 @@ describe("Web socket endpoint", () => {
         expect(message.payload.y).toBe(adminY);
     });
 
-    test("Movement rejection on moving 2 blocks at the same time", async() => {
+    test("Movement rejection on moving 2 blocks at the same time", async () => {
         ws1.send(JSON.stringify({
             "type": "move",
             "payload": {
-                "x": adminX+2,
+                "x": adminX + 2,
                 "y": adminY
             }
         }));
@@ -1070,5 +1079,49 @@ describe("Web socket endpoint", () => {
 
         expect(message.type).toBe("movement-rejected");
         expect(message.payload.x).toBe(adminX);
+    });
+
+
+    //if error -> 2:48:38
+    test("Correct movemnt = results in showcasing movemnt in x and y in both the users server", async () => {
+        ws1.send(JSON.stringify({
+            "type": "move",
+            "payload": {
+                "x": adminX + 1,
+                "y": adminY
+            }
+        }));
+
+        const messageRecivedBySecondUser = await waitForAndPopLatestMessage(ws2Messages);
+
+        expect(messageRecivedBySecondUser.type).toBe("movement-rejected");
+        expect(messageRecivedBySecondUser.payload.x).toBe(adminX + 1);
+        expect(messageRecivedBySecondUser.payload.userId).toBe(adminId);
+    });
+
+    test("If one of the users leaves the other should sees it", async () => {
+        ws1.close();
+
+        const message = await waitForAndPopLatestMessage(ws2Messages);
+
+        expect(message.type).toBe("user-left");
+        expect(message.payload.userId).toBe(adminId);
+    });
+
+    test("Whenever a user joins a space, all other users must recive a event", async () => {
+        ws1.send(JSON.stringify({
+            "type": "join",
+            "payload": {
+                "spaceId": spaceId,
+                "token": adminId
+            }
+        }));
+
+        const message = await waitForAndPopLatestMessage(ws2Messages);
+
+        expect(message.type).toBe("user-join");
+        expect(message.userId).toBe(adminId);
+        expect(message.payload.x).toBe(adminX);
+        expect(message.payload.y).toBe(adminY);
     })
-})
+});
