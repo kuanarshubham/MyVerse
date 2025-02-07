@@ -1,5 +1,5 @@
 {
-  "name": "myVerse",
+  "name": "myverse",
   "private": true,
   "scripts": {
     "build": "turbo build",
