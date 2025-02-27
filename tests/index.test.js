@@ -4,153 +4,155 @@ const BACKEND_URL = "http://localhost:3000";
 const WS_URL = "ws://localhost:3001";
 
 const axios = {
-    post: async(...args) => {
-        try{
+    post: async (...args) => {
+        try {
             const res = await Axios.post(...args);
-            return res; 
-        } catch(e){
+            return res;
+        } catch (e) {
             return e.response;
         }
     },
 
-    get: async(...args) => {
-        try{
+    get: async (...args) => {
+        try {
             const res = await Axios.get(...args);
-            return res; 
-        } catch(e){
+            return res;
+        } catch (e) {
             return e.response;
         }
     },
 
-    put: async(...args) => {
-        try{
+    put: async (...args) => {
+        try {
             const res = await Axios.put(...args);
-            return res; 
-        } catch(e){
+            return res;
+        } catch (e) {
             return e.response;
         }
     },
 
-    delete: async(...args) => {
-        try{
+    delete: async (...args) => {
+        try {
             const res = await Axios.delete(...args);
-            return res; 
-        } catch(e){
+            return res;
+        } catch (e) {
             return e.response;
         }
     }
 }
 
-describe("Authentication endpoint", () => {
-    test("User should be able to sign up with a unique username", async () => {
-        const username = `sk-auth1-${Math.floor(Math.random() * 10)}`;
-        const password = `1234`;
+// describe("Authentication endpoint", () => {
+//     test("User should be able to sign up with a unique username", async () => {
+//         const username = `sk-auth1-${Math.floor(Math.random() * 10)}`;
+//         const password = `1234`;
 
-        const resposne = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
-            username,
-            password,
-            type: "admin"
-        });
+//         const resposne = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+//             username,
+//             password,
+//             type: "admin"
+//         });
 
-        expect(resposne.status).toBe(200);
+//         expect(resposne.status).toBe(200);
 
-        //if someone tries to sign-up using the same username
+//         //if someone tries to sign-up using the same username
 
-        const updatedResposne = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
-            username,
-            password,
-            type: "admin"
-        });
+//         const updatedResposne = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+//             username,
+//             password,
+//             type: "admin"
+//         });
 
-        expect(updatedResposne.status).toBe(409);
-    });
+//         expect(updatedResposne.status).toBe(409);
+//     });
 
-    test("User should be able to sign in with correct credentials", async () => {
-        const username = `sk-auth2-${Math.floor(Math.random() * 10)}`;
-        const password = `1234`;
+//     test("User should be able to sign in with correct credentials", async () => {
+//         const username = `sk-auth2-${Math.floor(Math.random() * 10)}`;
+//         const password = `1234`;
 
-        const res = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
-            username,
-            password,
-            type: "admin"
-        });
+//         const res = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+//             username,
+//             password,
+//             type: "admin"
+//         });
 
-        //console.log(res);
+//         //console.log(res);
 
-        const resposne = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
-            username,
-            password
-        });
+//         const resposne = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+//             username,
+//             password
+//         });
 
-        expect(resposne.status).toBe(200);
-        expect(resposne.data.data.token).toBeDefined();
-    });
+//         expect(resposne.status).toBe(200);
+//         expect(resposne.data.data.token).toBeDefined();
+//     });
 
-    test("User tries sign-in with invalid credentials", async () => {
-        
-        let username = `sk-auth3-${Math.floor(Math.random() * 10)}`;
-        let password = `1234`;
+//     test("User tries sign-in with invalid credentials", async () => {
 
-        await axios.post(`${BACKEND_URL}/api/v1/signup`, {
-            username,
-            password,
-            type: "user"
-        });
+//         let username = `sk-auth3-${Math.floor(Math.random() * 10)}`;
+//         let password = `1234`;
 
-        //invalid password
+//         await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+//             username,
+//             password,
+//             type: "user"
+//         });
 
-        let password2 = `invalid_passowrd`;
+//         //invalid password
 
-        const updatedRes = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
-            username,
-            password: password2
-        });
+//         let password2 = `invalid_passowrd`;
 
-        expect(updatedRes.status).toBe(400);
+//         const updatedRes = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+//             username,
+//             password: password2
+//         });
+
+//         expect(updatedRes.status).toBe(400);
 
 
-        // invalid username
+//         // invalid username
 
-        let username2 = `142267`;
+//         let username2 = `142267`;
 
-        const updatedRes2 = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
-            username: username2,
-            password
-        });
+//         const updatedRes2 = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+//             username: username2,
+//             password
+//         });
 
-        expect(updatedRes2.status).toBe(404);
-    });
+//         expect(updatedRes2.status).toBe(404);
+//     });
 
-    test("User tries sign-up with empty feild(s)", async () => {
-        const username = "";
-        const password = `1234`;
+//     test("User tries sign-up with empty feild(s)", async () => {
+//         const username = "";
+//         const password = `1234`;
 
-        const res = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
-            username,
-            password
-        });
+//         const res = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+//             username,
+//             password
+//         });
 
-        expect(res.status).toBe(400);
+//         expect(res.status).toBe(400);
 
-        const username1 = `sk-auth4-${Math.floor(Math.random() * 10)}`;
-        const password1 = "";
+//         const username1 = `sk-auth4-${Math.floor(Math.random() * 10)}`;
+//         const password1 = "";
 
-        const res1 = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
-            username: username1,
-            password: password1
-        });
+//         const res1 = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+//             username: username1,
+//             password: password1
+//         });
 
-        expect(res1.status).toBe(400);
-    });
+//         expect(res1.status).toBe(400);
+//     });
 
-    afterAll(async() => {
-        
-        const res = await axios.delete(`${BACKEND_URL}/api/v1/allTablesAfterTest`);
-        expect(res.status).toBe(200);
-    });
-});
+//     afterAll(async() => {
+
+//         const res = await axios.delete(`${BACKEND_URL}/api/v1/allTablesAfterTest`);
+//         expect(res.status).toBe(200);
+//     });
+// });
 
 // describe("User metadata endpoint", () => {
+//     jest.setTimeout(15000);
+
 //     let token, avatarId;
 //     beforeAll(async () => {
 //         const username = `sk-${Math.floor(Math.random() * 10)}`;
@@ -167,14 +169,18 @@ describe("Authentication endpoint", () => {
 //             password
 //         });
 
-//         token = resposne.data.token;
+//         token = resposne.data.data.token;
 
 //         const avatarResponse = await axios.post(`${BACKEND_URL}/api/v1/admin/avatar`, {
 //             "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm3RFDZM21teuCMFYx_AROjt-AzUwDBROFww&s",
 //             "name": "Timmy"
+//         }, {
+//             headers: {
+//                 authorization: `Bearer ${token}`
+//             }
 //         });
 
-//         avatarId = avatarResponse.avatarId;
+//         avatarId = avatarResponse.data.data.avatarId;
 //     });
 
 //     test("User can't update their metadata", async () => {
@@ -208,56 +214,68 @@ describe("Authentication endpoint", () => {
 //             avatarId
 //         });
 
-//         expect(response.status).toBe(403);
+//         expect(response.status).toBe(401);
+//     });
+
+//     afterAll(async() => {
+
+//         const res = await axios.delete(`${BACKEND_URL}/api/v1/allTablesAfterTest`);
+//         expect(res.status).toBe(200);
 //     });
 // });
 
-// describe("User avatar information endpoint", () => {
-//     let token, avatarId, userId;
-//     beforeAll(async () => {
-//         const username = `sk-${Math.floor(Math.random() * 10)}`;
-//         const password = "1234";
+describe("User avatar information endpoint", () => {
+    let token, avatarId, userId;
+    beforeAll(async () => {
+        const username = `sk-${Math.floor(Math.random() * 10)}`;
+        const password = "1234";
 
-//         const responseSignup = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
-//             username,
-//             password,
-//             type: "admin"
-//         });
+        const responseSignup = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
+            username,
+            password,
+            type: "admin"
+        });
 
-//         userId = responseSignup.userId;
+        userId = responseSignup.userId;
 
-//         const resposne = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
-//             username,
-//             password
-//         });
+        const resposne = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
+            username,
+            password
+        });
 
-//         token = resposne.data.token;
+        token = resposne.data.token;
 
-//         const avatarResponse = await axios.post(`${BACKEND_URL}/api/v1/admin/avatar`, {
-//             "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm3RFDZM21teuCMFYx_AROjt-AzUwDBROFww&s",
-//             "name": "Timmy"
-//         });
+        const avatarResponse = await axios.post(`${BACKEND_URL}/api/v1/admin/avatar`, {
+            "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm3RFDZM21teuCMFYx_AROjt-AzUwDBROFww&s",
+            "name": "Timmy"
+        });
 
-//         avatarId = avatarResponse.avatarId;
-//     });
+        avatarId = avatarResponse.avatarId;
+    });
 
-//     test("Get avatar information for the user", async () => {
-//         const response = await axios.get(`${BACKEND_URL}/api/v1/user/metadata/bulk?ids=[${userId}]`);
+    test("Get avatar information for the user", async () => {
+        const response = await axios.get(`${BACKEND_URL}/api/v1/user/metadata/bulk?ids=[${userId}]`);
 
-//         expect(response.data.avatars.length).toBe(1);
-//         expect(response.data.avatars[0].userId).toBe(userId);
-//     });
+        expect(response.data.avatars.length).toBe(1);
+        expect(response.data.avatars[0].userId).toBe(userId);
+    });
 
-//     test("Get all avatars avaibale", async () => {
-//         const response = await axios.get(`${BACKEND_URL}/api/v1/avatars`);
+    test("Get all avatars avaibale", async () => {
+        const response = await axios.get(`${BACKEND_URL}/api/v1/avatars`);
 
-//         expect(response.data.avatars).not.toBe(0);
+        expect(response.data.avatars).not.toBe(0);
 
-//         const currAvatar = response.find(x => x.id);
+        const currAvatar = response.find(x => x.id);
 
-//         expect(currAvatar.length).toBeDefined();
-//     })
-// });
+        expect(currAvatar.length).toBeDefined();
+    });
+
+    // afterAll(async () => {
+
+    //     const res = await axios.delete(`${BACKEND_URL}/api/v1/allTablesAfterTest`);
+    //     expect(res.status).toBe(200);
+    // });
+});
 
 // describe("Space information", () => {
 //     let userToken, adminToken, avatarId, userId, adminId, mapId, elementId;
@@ -491,6 +509,8 @@ describe("Authentication endpoint", () => {
 //         expect(foundSpace).toBeDefined();
 //     })
 // });
+
+console.log("------");
 
 // describe("Arena informatin", () => {
 //     let userToken, adminToken, avatarId, userId, adminId, mapId, elementId, spaceId;
@@ -938,7 +958,7 @@ describe("Authentication endpoint", () => {
 
 //         adminId = adminSignupRes.data.id;
 
-//         //admin sign-in 
+//         //admin sign-in
 //         const adminSigninRes = await axios.post(`${BACKEND_URL}/api/v1/signin`, {
 //             username: usernameAdmin,
 //             password
@@ -1034,7 +1054,7 @@ describe("Authentication endpoint", () => {
 //     async function setupWS() {
 //         ws1 = new WebSocket(WS_URL);
 
-//         //waits indefinetilty till ws1 opens 
+//         //waits indefinetilty till ws1 opens
 //         await new Promise(resolve => {
 //             ws1.onopen = resolve;
 //         });
@@ -1175,3 +1195,6 @@ describe("Authentication endpoint", () => {
 //         expect(message.payload.y).toBe(adminY);
 //     })
 // });
+
+
+
