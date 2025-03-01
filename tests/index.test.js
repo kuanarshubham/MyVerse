@@ -323,13 +323,13 @@ describe("Space information", () => {
 
         const responseElement1 = await axios.post(`${BACKEND_URL} /api/v1/admin/element`, element1, {
             headers: {
-                "Authorization": `Bearer ${adminToken}`
+                authorization: `Bearer ${adminToken}`
             }
         });
 
-        const responseElement2 = await axios.post(`${BACKEND_URL} /api/v1/admin/element`, element2, {
+        const responseElement2 = await axios.post(`${BACKEND_URL} /api/v1/admin/element`, element1, {
             headers: {
-                "Authorization": `Bearer ${adminToken}`
+                authorization: `Bearer ${adminToken}`
             }
         });
 
@@ -351,7 +351,7 @@ describe("Space information", () => {
             }]
         }, {
             headers: {
-                Authorization: `Bearer ${adminToken}`
+                authorization: `Bearer ${adminToken}`
             }
         });
 
@@ -513,7 +513,7 @@ describe("Space information", () => {
         const foundSpace = getAllExistingSpaces.data.find(x => x === response.data.spaceId);
 
         expect(foundSpace).toBeDefined();
-    })
+    });
 });
 
 console.log("------");
