@@ -40,7 +40,7 @@ export const checkCanMove = (target: TPosition):boolean => {
     const x = Math.floor(target.x/TILE_SIZE);
     const y = Math.floor(target.y/TILE_SIZE);
 
-    if(layerUnavailable[x*COL + y - 1] === 1) return false;
+    if(layerUnavailable[x*COL + y - 1] > 0) return false;
     return true;
 }
 
@@ -48,7 +48,7 @@ export const handleMovemnt = (currentPos: TPosition, targetPos: TPosition, moveS
     console.log("Handle Movement");
     console.log("movespeed: ", moveSpeed);
     console.log("delta: ", delta);
-    const step = moveSpeed * TILE_SIZE * delta;
+    const step = moveSpeed * TILE_SIZE * 1;
     
     const distance = Math.hypot(targetPos.x - currentPos.x, targetPos.y - currentPos.y);
 

@@ -104,7 +104,7 @@ const People = ({ texture, onMove }: TPeople) => {
                     texture={sprite.texture}
                     x={position.current.x}
                     y={position.current.y}
-                    scale={.6}
+                    scale={1}
                 />
             }
         </pixiContainer>

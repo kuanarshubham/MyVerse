@@ -1,6 +1,6 @@
 import type { Direction } from "@/space-engine/utils/constants";
 import { TILE_SIZE } from "@/utils/constants.utils";
-import { Rectangle, Sprite, Texture } from "pixi.js"
+import { Rectangle , Sprite, Texture } from "pixi.js"
 import { useRef, useState } from "react"
 
 interface TUsePeopleAnimation {
@@ -31,7 +31,10 @@ const usePeopleAnimation = ({ texture, frameHeight, frameWidth, totalFrame, anim
 
 
     const createSprite = (row: number, col: number) => {
-        const frame = new Texture(texture.baseTexture);
+        const frame = new Texture({
+            source: texture.source,
+            frame: new Rectangle(col*frameWidth, row*frameHeight, frameWidth, frameHeight)
+        });
 
         const newSprite = new Sprite(frame);
         newSprite.width = TILE_SIZE;
