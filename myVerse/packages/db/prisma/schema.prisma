@@ -54,7 +54,6 @@ model Element {
   height                   Int
   imageUrl                 String
 
-  associatedSpace          String
   space                    spaceElements []
 
   mapElements              mapElements[]
@@ -65,6 +64,7 @@ model Map {
   width  Int
   height Int
   name   String
+  thumbnail String
 
   mapElements mapElements[]
 }

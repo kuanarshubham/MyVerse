@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import axios from "axios";
 
 // ui
@@ -29,7 +29,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setNavBtn2 } from "@/feature/navSlice";
 
 // local
-import { baseUrlHttp } from "@/utils/constants.utils";
+import { BASE_HTTP_URL } from "@/utils/constants.utils";
 import type { Element, ElementCard } from "@/types/space.type";
 
 
@@ -58,7 +58,7 @@ const CreateSpace = () => {
 
   const getAllAvailableElements = async () => {
     try {
-      const res = await axios.get(`${baseUrlHttp}/elements`);
+      const res = await axios.get(`${BASE_HTTP_URL}/elements`);
 
       // TODO
       if (res.status !== 200) console.log("Error at fetching");
@@ -70,10 +70,14 @@ const CreateSpace = () => {
     }
   }
 
+  const handleSbmit = useCallback(() => {
+    
+  }, [])
+
 
   return (
     <Dialog>
-      <form>
+      <form >
 
         <DialogTrigger asChild>
           <RainbowButton
@@ -126,7 +130,7 @@ const CreateSpace = () => {
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit">Create</Button>
             </DialogFooter>
           </MagicCard>
         </DialogContent>

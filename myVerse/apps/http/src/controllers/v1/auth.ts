@@ -10,6 +10,7 @@ import ApiError from "../../utils/errorHandler.js";
 
 
 const signup = asyncHandler(async(req: Request, res: Response) => {
+    console.log("Inside signup");
     const parsedData = SignupSchema.safeParse(req.body);
 
     if(!parsedData.success) {return res.status(400).send(new ApiError(400, `Validation issue at sign-up`))}
@@ -36,7 +37,9 @@ const signup = asyncHandler(async(req: Request, res: Response) => {
 })
 
 
+// TODO: Used no bycrypt library, due to clashes 
 const signin = asyncHandler(async(req: Request, res: Response) => {
+    console.log("Inside signin");
     const parsedData = SigninSchema.safeParse(req.body);
 
     if(!parsedData.success) return res.status(400).send(new ApiError(400, `Validation issue at sign-in`))
@@ -60,6 +63,5 @@ const signin = asyncHandler(async(req: Request, res: Response) => {
         token
     }, "User sucessfully sign-in"));
 });
-
 
 export const auth = [signup, signin];

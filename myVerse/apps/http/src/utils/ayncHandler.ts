@@ -5,7 +5,7 @@ export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunctio
         Promise
             .resolve(fn(req, res, next))
             .catch((error) => {
-                console.log("Inside the Catch: ", error);
+                console.log("Inside the Catch of asyncHandler.ts: ", error);
                 next(error);
             });
 };

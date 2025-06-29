@@ -3,8 +3,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Layout from './Layout';
-import store from './store/Auth.store'
+import Space from "./space-engine/components/Space/Space";
+import store from './store/store'
 import { Provider } from 'react-redux'
+import "./assets/fonts/font.css";
 
 
 
@@ -18,6 +20,10 @@ const App = () => {
                 {
                     path: "",
                     Component: Home
+                },
+                {
+                    path: "space",
+                    Component: Space
                 }
             ]
         },

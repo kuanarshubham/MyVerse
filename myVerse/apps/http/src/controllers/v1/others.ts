@@ -9,20 +9,24 @@ const createElements = (req: Request, res: Response) => {
     });
 } 
 
-const getAllAvatars = (req: Request, res: Response) => {
-    res.json({
-        route: "This route is admin"
-    });
-} 
+const getAllAvatars = asyncHandler(async(req: Request, res: Response) => {
+    console.log("Inside getAllAvatars");
+    const allAvatars = await client.avatar.findMany({});
+
+    return res.status(200).send(new ApiResponse(200, {avatar: allAvatars}));
+} )
 
 const deleteAllDataFromAllTable = asyncHandler(async(req: Request, res:Response) => {
+    console.log("Inside deleteAllDataFromAllTable");
+
+    const mapElementsRes = await client.mapElements.deleteMany({});
+    const spaceElementsRes = await client.spaceElements.deleteMany({});
+    const spaceRes = await client.space.deleteMany({});
     const avtarRes = await client.avatar.deleteMany({});
     const elementRes = await client.element.deleteMany({});
     const mapRes = await client.map.deleteMany({});
-    const spaceRes = await client.space.deleteMany({});
     const userRes = await client.user.deleteMany({});
-    const mapElementsRes = await client.mapElements.deleteMany({});
-    const spaceElementsRes = await client.spaceElements.deleteMany({});
+    
 
     return res.status(200).send(new ApiResponse(200, {avtarRes, elementRes, mapRes, spaceRes, userRes, mapElementsRes, spaceElementsRes}, "Sucessful"));
 });

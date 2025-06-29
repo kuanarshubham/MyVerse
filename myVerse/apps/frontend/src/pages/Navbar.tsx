@@ -1,11 +1,13 @@
 import * as React from "react"
 import { Link, useNavigate } from "react-router"
 
-//redux
+// redux
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { setSignin } from "../feature/authSlice";
+import { setSignin, setToken } from "../feature/authSlice";
+import { setNavBtn1, setNavBtn2 } from "@/feature/navSlice";
 
 
+// ui
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -17,6 +19,8 @@ import {
 } from "@/components/ui/navigation-menu"
 import { RainbowButton } from "@/components/magicui/rainbow-button";
 
+// local
+import CreateSpace from "./CreateSpace";
 
 
 
@@ -40,33 +44,42 @@ function ListItem({ title, children, href, ...props }: React.ComponentPropsWitho
 const Navbar = () => {
 
     const token = useAppSelector(state => state.auth.token);
-    const signin = useAppSelector(state => state.auth.signin);
 
     const dispatch = useAppDispatch();
 
     const navigate = useNavigate();
 
-    const [navBtn1, setNavBtn1] = React.useState<"default" | "outline" | null>("default");
-    const [navBtn2, setNavBtn2] = React.useState<"default" | "outline" | null>("default");
+    const navBtn1 = useAppSelector(s => s.nav.navBtn1);
+    const navBtn2 = useAppSelector(s => s.nav.navBtn2);
+
+    React.useEffect(() => {
+        if (!token) {
+            const authToken = localStorage.getItem("auth-token");
+
+            if (authToken) dispatch(setToken({ token: authToken }));
+        }
+    })
 
 
 
     return (
-        <NavigationMenu viewport={false} className="max-w-none h-[65%] w-screen flex justify-between pl-15 pr-9 mt-2 items-center">
-            <NavigationMenuList className="lg:w-[550px] flex justify-between items-center">
+        <NavigationMenu viewport={true} className="max-w-full h-[65%] w-screen flex justify-between  mt-2 items-center pr-4 pl-4 lg:pl-8 lg:pr-8 ">
+            <NavigationMenuList className="lg:w-[550px]  flex justify-between items-center">
                 <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                        <Link to="/">Logo</Link>
+                        <Link to="/">
+                            <h1 style={{fontFamily: "ByteBounce"}} className="font-light text-4xl w-full h-full   flex justify-center items-center  bg-gradient-to-bl from-purple-500 via-pink-400 to-yellow-500 text-transparent bg-clip-text">MyVerse</h1>
+                        </Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem>
+                <NavigationMenuItem className="hidden lg:block">
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                         <Link to="/about">About Us</Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem>
+                <NavigationMenuItem className="hidden lg:block">
                     <NavigationMenuTrigger>Assert</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
@@ -98,7 +111,7 @@ const Navbar = () => {
                     </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem>
+                <NavigationMenuItem className="hidden lg:block">
                     <NavigationMenuTrigger>Contact Us</NavigationMenuTrigger>
                     <NavigationMenuContent>
                         <ul className="grid w-[300px] gap-4">
@@ -132,7 +145,7 @@ const Navbar = () => {
                     </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                <NavigationMenuItem>
+                <NavigationMenuItem className="hidden lg:block">
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                         <Link to="/pricing">Pricing</Link>
                     </NavigationMenuLink>
@@ -143,42 +156,42 @@ const Navbar = () => {
             {
                 token
                     ?
-                    <div className="w-[17%] h-[100%] flex justify-around pt-2 pb-3 items-center">
+                    <div className="w-[17%] h-[100%] flex justify-end gap-4 lg:gap-8 pt-2 pb-3 items-center">
                         <RainbowButton
                             variant={navBtn1}
-                            onMouseEnter={() => setNavBtn1("outline")}
-                            onMouseLeave={() => setNavBtn1("default")}
+                            onMouseEnter={() => dispatch(setNavBtn1({type: "outline"}))}
+                            onMouseLeave={() => dispatch(setNavBtn1({type: "default"}))}
                             style={{ transition: 'all 0.5s ease-in-out' }}
                         >
                             Profile
                         </RainbowButton>
-                        <RainbowButton
-                            variant={navBtn2}
-                            onMouseEnter={() => setNavBtn2("outline")}
-                            onMouseLeave={() => setNavBtn2("default")}
-                            style={{ transition: 'all 0.5s ease-in-out' }}
-                        >
-                            Create Space
-                        </RainbowButton>
+
+                        <CreateSpace />
+                        
                     </div>
                     :
-                    <div className="w-[17%] h-[100%] flex justify-around pt-2 pb-3 items-center">
+                    <div className="w-[50%] lg:w-[17%] h-[100%] flex justify-around pt-2 pb-3 items-center">
                         <RainbowButton
                             variant={navBtn1}
-                            onMouseEnter={() => setNavBtn1("outline")}
-                            onMouseLeave={() => setNavBtn1("default")}
+                            onMouseEnter={() => dispatch(setNavBtn1({type:"outline"}))}
+                            onMouseLeave={() => dispatch(setNavBtn1({type:"default"}))}
                             style={{ transition: 'all 0.5s ease-in-out' }}
                             onClick={() => {
-                                dispatch(setSignin());
+                                dispatch(setSignin({ value: true }));
+                                navigate("/auth");
                             }}
                         >
                             Login
                         </RainbowButton>
                         <RainbowButton
                             variant={navBtn2}
-                            onMouseEnter={() => setNavBtn2("outline")}
-                            onMouseLeave={() => setNavBtn2("default")}
+                            onMouseEnter={() => dispatch(setNavBtn2({type:"outline"}))}
+                            onMouseLeave={() => dispatch(setNavBtn2({type:"default"}))}
                             style={{ transition: 'all 0.5s ease-in-out' }}
+                            onClick={() => {
+                                dispatch(setSignin({ value: false }));
+                                navigate("/auth");
+                            }}
                         >
                             Register
                         </RainbowButton>

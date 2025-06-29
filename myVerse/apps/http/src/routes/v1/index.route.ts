@@ -10,8 +10,8 @@ router.post("/signin", auth[1]);
 
 //others
 import { others } from "../../controllers/v1/others.js";
-router.get("/avatar", others[0]);
-router.get("/elements", others[1]);
+router.get("/elements", others[0]);
+router.get("/avatars", others[1]);
 router.delete("/allTablesAfterTest", others[2]);
 
 
