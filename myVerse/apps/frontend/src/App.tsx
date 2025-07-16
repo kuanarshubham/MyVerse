@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import Layout from './Layout';
-import Space from "./space-engine/components/Space/Space";
+import Space from "./game-engine/components/Space";
 import store from './store/store'
 import { Provider } from 'react-redux'
 import "./assets/fonts/font.css";

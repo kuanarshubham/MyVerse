@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    screenWidth: 100,
-    screenHeight: 100
+    screenWidth: 500,
+    screenHeight: 500
 }
 
 const spaceSlice = createSlice({

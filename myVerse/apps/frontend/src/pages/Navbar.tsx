@@ -63,7 +63,7 @@ const Navbar = () => {
 
 
     return (
-        <NavigationMenu viewport={true} className="max-w-full h-[65%] w-screen flex justify-between  mt-2 items-center pr-4 pl-4 lg:pl-8 lg:pr-8 ">
+        <NavigationMenu viewport={true} className="max-w-full h-16 w-screen flex justify-between  mt-2 items-center pr-4 pl-4 lg:pl-8 lg:pr-8 ">
             <NavigationMenuList className="lg:w-[550px]  flex justify-between items-center">
                 <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
