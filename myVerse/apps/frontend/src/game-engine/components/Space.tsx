@@ -84,9 +84,9 @@ const Space = () => {
     }, []);
 
     return (
-        // <div className={`w-[${sizeCanvas.width}] h-[${sizeCanvas.width}] flex justify-center items-center`}>
+        <div className={`w-[${sizeCanvas.width}] h-[${sizeCanvas.width}] flex justify-center items-center`}>
 
-            <Application height={auto} width={sizeCanvas.width+100} backgroundColor={"yellow"} className='flex justify-center items-center'>
+            <Application>
                 <Map
                     size={{
                         height: sizeCanvas.height,
@@ -97,7 +97,7 @@ const Space = () => {
                 />
                 <People texture={heroTexture} onMove={updateHeroPosition} />
             </Application>
-        // </div>
+        </div>
     )
 }
 

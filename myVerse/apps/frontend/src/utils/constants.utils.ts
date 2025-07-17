@@ -8,5 +8,5 @@ export const GAME_HEIGHT = TILE_SIZE * COL - TILE_SIZE*2;
 export const HERO_WIDTH = GAME_WIDTH - (2 * TILE_SIZE);
 export const HERO_HEIGHT = GAME_HEIGHT - (2 * TILE_SIZE);
 
-export const DEFAULT_X = TILE_SIZE*10;
-export const DEFAULT_Y = TILE_SIZE*1;
+export const DEFAULT_X = TILE_SIZE*0;
+export const DEFAULT_Y = TILE_SIZE*0;

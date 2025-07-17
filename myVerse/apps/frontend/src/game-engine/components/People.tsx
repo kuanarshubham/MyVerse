@@ -38,7 +38,9 @@ const People = ({ texture, onMove }: PropsWithChildren<IHeroProps>) => {
         texture={texture}
         x={position.current.x}
         y={position.current.y}
-        scale={1}/>
+        scale={2}
+        
+      />
 
     </pixiContainer>
   )
