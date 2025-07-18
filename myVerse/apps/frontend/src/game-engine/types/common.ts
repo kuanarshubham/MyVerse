@@ -1,14 +1,9 @@
-interface IPostion{
+export interface IPosition{
     x: number,
     y: number
 }
 
 
-export type Direction = 
-
-
-
-
-
+export type Direction = "UP" | "DOWN" | "RIGHT" | "LEFT" | "UNDEFINED";
 
 

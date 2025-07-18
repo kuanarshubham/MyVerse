@@ -12,8 +12,6 @@ extend({
 
 // local
 
-
-
 // types
 interface ISpaceMap {
     size: {height: number, width: number},

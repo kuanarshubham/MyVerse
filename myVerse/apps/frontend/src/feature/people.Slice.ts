@@ -14,12 +14,12 @@ const peopleSlice = createSlice({
     name: "people",
     initialState,
     reducers: {
-        move: (state: TPeople, action) => {
-            state.x = Math.floor(action.payload.x);
+        setNewPosition: (state: TPeople, action) => {
+            state.x = action.payload.x;
             state.y = action.payload.y;
         }
     }
 });
 
 export default peopleSlice.reducer;
-export const {move} = peopleSlice.actions;
+export const {setNewPosition} = peopleSlice.actions;
