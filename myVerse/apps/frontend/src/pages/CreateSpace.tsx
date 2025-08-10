@@ -70,7 +70,7 @@ const CreateSpace = () => {
     }
   }
 
-  const handleSbmit = useCallback(() => {
+  const handleSubmit = useCallback(() => {
     
   }, [])
 
