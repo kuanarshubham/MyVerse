@@ -1,0 +1,28 @@
+# Ignore all node_modules directories, no matter where they are
+node_modules/
+**/node_modules/
+
+# Ignore common build artifacts and temporary files
+dist/
+**/dist/
+build/
+**/build/
+.next/
+.turbo/
+.vscode/
+
+# Ignore package manager specific files that should not be copied
+.npm/
+.yarn/
+.pnpm-store/
+pnpm-lock.yaml # This should only be copied when explicitly needed for pnpm setup in Dockerfile
+
+# Other common ignore patterns
+.git/
+.env
+*.env
+npm-debug.log
+yarn-debug.log
+*.log
+tmp/
+*.tmp
