@@ -1,4 +1,4 @@
-# Turborepo starter
+<!-- # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
 
@@ -87,4 +87,10 @@ Learn more about the power of Turborepo:
 
 ### writing Read.md file
 
-"https://youtu.be/Z3BXOrhMkZI?si=tF74cIO4LWIAe2VJ&t=211"
+"https://youtu.be/Z3BXOrhMkZI?si=tF74cIO4LWIAe2VJ&t=211" -->
+
+
+
+docker compose up --build -d
+
+docker exec myverse-http_server-1 npx prisma migrate deploy
