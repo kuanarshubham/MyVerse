@@ -12,11 +12,22 @@ export const DIRECTION_KEYS: Record<string, Direction> = {
   ArrowRight: 'RIGHT',
 }
 
-
 export const usePeopleControl = () => {
   const [heldDirections, setHeldDirections] = useState<Direction[]>([])
 
   const handleKey = useCallback((e: KeyboardEvent, isKeyDown: boolean) => {
+
+    // in case the last one pressed would be used considered and 
+    // if one key is removed, the other key is taken into consideration
+
+    // if is isKeyUp === true => add it to the start of arary
+    // else remove the direction
+
+    // Example:
+    // Press W → ['UP']
+    // Then press D → ['RIGHT', 'UP']
+    // Release D → back to ['UP']
+
     const direction = DIRECTION_KEYS[e.code]
     if (!direction) return
 
@@ -41,10 +52,10 @@ export const usePeopleControl = () => {
     }
   }, [handleKey])
 
-  const getControlsDirection = useCallback(
-    (): Direction | null => heldDirections[0] || null,
+  const getControlsDirection = useCallback((): Direction | null => 
+    heldDirections[0] || null,
     [heldDirections]
-  )
+  );
 
   return { getControlsDirection }
 }

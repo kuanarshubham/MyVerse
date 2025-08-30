@@ -6,15 +6,20 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "postinstall": "pnpm exec prisma generate"
   },
   "devDependencies": {
     "prettier": "^3.4.2",
     "turbo": "^2.4.0",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "prisma": "^6.3.1"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "prisma": {
+    "schema": "packages/db/prisma/schema.prisma"
   }
 }

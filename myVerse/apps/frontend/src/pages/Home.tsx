@@ -32,7 +32,7 @@ const Home = () => {
 
   const getAllUserSpace = useCallback(async () => {
     try {
-      const res = await axios.get(`${BASE_HTTP_URL}/space`, {
+      const res = await axios.get(`${BASE_HTTP_URL}/space/all`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

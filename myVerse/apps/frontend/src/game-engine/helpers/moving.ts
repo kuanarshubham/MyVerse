@@ -15,14 +15,14 @@ export const calculateNewTarget = (
 ): IPosition => {
   return {
     x:
-      (x / TILE_SIZE) * TILE_SIZE +
+      Math.floor(x / TILE_SIZE) * TILE_SIZE +
       (direction === 'LEFT'
         ? -TILE_SIZE
         : direction === 'RIGHT'
         ? TILE_SIZE
         : 0),
     y:
-      (y / TILE_SIZE) * TILE_SIZE +
+      Math.floor(y / TILE_SIZE) * TILE_SIZE +
       (direction === 'UP' ? -TILE_SIZE : direction === 'DOWN' ? TILE_SIZE : 0),
   }
 }

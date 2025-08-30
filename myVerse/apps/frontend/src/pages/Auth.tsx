@@ -68,14 +68,19 @@ const Auth = () => {
         });
       }
       else {
-        response = await axios.post(`${BASE_HTTP_URL}/signup`, {
+        await axios.post(`${BASE_HTTP_URL}/signup`, {
           ...form,
           type: "user"
+        });
+
+        response = await axios.post(`${BASE_HTTP_URL}/signin`, {
+          ...form
         });
       }
 
       if (response.status === 200) {
         const { token } = response.data.data;
+        console.log(token);
         localStorage.setItem("auth-token", token);
         dispatch(setToken({token}));
         navigate("/");

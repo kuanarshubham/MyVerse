@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { Texture, Container, Assets } from 'pixi.js';
+import { Texture, Container } from 'pixi.js';
 import type { PropsWithChildren } from 'react'
 import { extend } from '@pixi/react'
 import { Sprite } from 'pixi.js'
