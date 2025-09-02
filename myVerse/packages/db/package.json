@@ -8,7 +8,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -b",
     "mig": "npx prisma migrate dev",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "node ./dist/seed.js"
   },
   "exports": {
     "./client": "./dist/index.js"
@@ -19,5 +23,10 @@
   "dependencies": {
     "@prisma/client": "^6.3.1",
     "prisma": "^6.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "typescript": "^5.0.0",        
+    "ts-node": "^10.9.2"   
   }
 }

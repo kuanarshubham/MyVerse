@@ -94,3 +94,5 @@ Learn more about the power of Turborepo:
 docker compose up --build -d
 
 docker exec myverse-http_server-1 npx prisma migrate deploy
+
+docker-compose exec http_server pnpm --filter @repo/db db:seed

@@ -12,4 +12,5 @@ export interface SpaceCardProps {
   title: string;
   height: number;
   width: number;
+  id: string;
 }

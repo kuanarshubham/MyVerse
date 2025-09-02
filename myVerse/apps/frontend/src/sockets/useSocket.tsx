@@ -1,100 +1,3 @@
-// import { useEffect, useRef, useState } from "react";
-
-// interface UseSocketProps {
-//   socketURL: string;
-//   token: string;
-//   spaceId: string;
-// }
-
-// type WSMessage = {
-//   type: string;
-//   payload: any;
-// };
-
-// export const useSocket = ({ socketURL, token, spaceId }: UseSocketProps) => {
-//   const wsRef = useRef<WebSocket | null>(null);
-//   const [users, setUsers] = useState<Map<string, any>>(new Map());
-//   const [isConnected, setIsConnected] = useState(false);
-
-//   // Send message helper
-//   const sendMessage = (msg: WSMessage) => {
-//     if (wsRef.current?.readyState === WebSocket.OPEN) {
-//       wsRef.current.send(JSON.stringify(msg));
-//     } else {
-//       console.warn("WebSocket is not open");
-//     }
-//   };
-
-//   // Join message
-//   const joinSpace = () => {
-//     sendMessage({
-//       type: "join",
-//       payload: {
-//         spaceId,
-//         token,
-//       },
-//     });
-//   };
-
-//   // Move message
-//   const sendMovement = (x: number, y: number) => {
-//     sendMessage({
-//       type: "move",
-//       payload: { x, y },
-//     });
-//   };
-
-//   useEffect(() => {
-//     const ws = new WebSocket(socketURL);
-//     wsRef.current = ws;
-
-//     ws.onopen = () => {
-//       console.log("✅ WebSocket connected");
-//       setIsConnected(true);
-//       joinSpace(); // Auto-join on connection
-//     };
-
-//     ws.onmessage = (event) => {
-//       try {
-//         const data = JSON.parse(event.data);
-
-//         if (data.type === "user-list") {
-//           const userMap = new Map<string, any>();
-//           data.payload.forEach((user: any) => {
-//             userMap.set(user.id, user);
-//           });
-//           setUsers(userMap);
-//         }
-
-//         // Extend this for other server-sent events
-//       } catch (err) {
-//         console.error("Invalid WebSocket message", err);
-//       }
-//     };
-
-//     ws.onclose = () => {
-//       console.warn("⚠️ WebSocket closed");
-//       setIsConnected(false);
-//     };
-
-//     ws.onerror = (err) => {
-//       console.error("❌ WebSocket error", err);
-//     };
-
-//     return () => {
-//       ws.close();
-//     };
-//   }, [socketURL, spaceId, token]);
-
-//   return {
-//     users,
-//     isConnected,
-//     sendMovement,
-//     reconnect: joinSpace,
-//   };
-// };
-
-
 import { useEffect, useRef, useState } from "react";
 
 interface UseSocketProps {
@@ -143,7 +46,6 @@ export const useSocket = ({ socketURL, token, spaceId }: UseSocketProps) => {
 
   // Sends a movement command
   const sendMovement = (x: number, y: number) => {
-    // You can add optimistic updates here before sending
     sendMessage({
       type: "move",
       payload: { x, y },
@@ -155,6 +57,8 @@ export const useSocket = ({ socketURL, token, spaceId }: UseSocketProps) => {
       return;
     }
 
+    // This connection logic is correct for your backend, which expects
+    // the token in a 'join' message, not the URL.
     const ws = new WebSocket(socketURL);
     wsRef.current = ws;
 
@@ -169,15 +73,28 @@ export const useSocket = ({ socketURL, token, spaceId }: UseSocketProps) => {
         const data = JSON.parse(event.data);
 
         switch (data.type) {
+          // --- THIS IS THE CORRECTED PART ---
           case "space-joined":
-            // Handle initial join message
+            console.log("Received space-joined with payload:", data.payload);
             const initialUsers = new Map<string, UserData>();
-            data.payload.users.forEach((user: UserData) => {
-              initialUsers.set(user.userId, user);
+
+            // Your backend sends an array of user ID strings. This code now handles that correctly.
+            const otherUserIds: string[] = data.payload.users;
+
+            otherUserIds.forEach((userId: string) => {
+              // We create a placeholder user. Their real position will appear
+              // when they move and the client receives a "movement" message.
+              initialUsers.set(userId, {
+                userId: userId,
+                x: 0, // Default position
+                y: 0, // Default position
+              });
             });
+
             setUsers(initialUsers);
             setMyPosition(data.payload.spawn);
             break;
+          // ------------------------------------
 
           case "user-join":
             // Add a new user to the map

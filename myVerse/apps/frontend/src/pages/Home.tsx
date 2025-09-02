@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 // ui
@@ -61,6 +62,7 @@ const Home = () => {
             <SpaceCard
               key={sp.id}
               thumbnail={sp.thumbnail}
+              id={sp.id}
               height={sp.height}
               width={sp.width}
               title={sp.title}
@@ -72,7 +74,8 @@ const Home = () => {
   )
 }
 
-const SpaceCard: React.FC<SpaceCardProps> = ({ thumbnail, title, height, width }) => {
+const SpaceCard: React.FC<SpaceCardProps> = ({ id, thumbnail, title, height, width }) => {
+  const navigate = useNavigate(); 
   let randH = Math.random() * height;
   let randW = Math.random() * width;
   return (
@@ -94,7 +97,7 @@ const SpaceCard: React.FC<SpaceCardProps> = ({ thumbnail, title, height, width }
         <CardTitle className="text-2xl">{title}</CardTitle>
       </CardContent>
       <CardFooter className="space-x-4">
-        <Button>Let&apos;s go</Button>
+        <Button onClick={() => navigate(`/space/${id}`)}>Let's go</Button>
         <Button variant="secondary">Another time</Button>
       </CardFooter>
     </Card>

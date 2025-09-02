@@ -22,7 +22,7 @@ const App = () => {
                     Component: Home
                 },
                 {
-                    path: "space",
+                    path: "space/:spaceId",
                     Component: Space
                 }
             ]
