@@ -3,7 +3,7 @@ import { PrismaClient, Role } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding database...');
+  console.log('Starting database seed...');
 
   // 1. Clean up existing data
   console.log('Cleaning database...');
@@ -15,8 +15,18 @@ async function main() {
   await prisma.element.deleteMany();
   await prisma.map.deleteMany();
 
-  // 2. Create Avatars
-  console.log('Creating avatars...');
+  // 2. Create a default Admin User (needed to create global assets)
+  console.log('Creating admin user...');
+  const admin = await prisma.user.create({
+    data: {
+      username: 'admin',
+      password: 'adminpassword', // In a real app, this should be hashed!
+      role: Role.Admin,
+    },
+  });
+
+  // 3. Create some default Avatars
+  console.log('Creating default avatars...');
   const avatar1 = await prisma.avatar.create({
     data: {
       name: 'Default Avatar 1',
@@ -30,89 +40,55 @@ async function main() {
     },
   });
 
-  // 3. Create Users (with simple text passwords)
-  console.log('Creating users...');
-  const adminUser = await prisma.user.create({
-    data: {
-      username: 'admin',
-      password: 'admin123', // Simple text password
-      role: Role.Admin,
-      avatarId: avatar1.id,
-    },
-  });
-
-  const normalUser = await prisma.user.create({
-    data: {
-      username: 'shubham',
-      password: 'user123', // Simple text password
-      role: Role.User,
-      avatarId: avatar2.id,
-    },
-  });
-
-  // 4. Create Elements
-  console.log('Creating elements...');
+  // 4. Create some default Elements
+  console.log('Creating default elements...');
   const tableElement = await prisma.element.create({
     data: {
       width: 2,
       height: 1,
       imageUrl: 'https://placehold.co/64x32/grey/white?text=Table',
+      static: true,
     },
   });
-
   const chairElement = await prisma.element.create({
     data: {
       width: 1,
       height: 1,
       imageUrl: 'https://placehold.co/32x32/brown/white?text=Chair',
+      static: true,
     },
   });
 
-  // 5. Create a "Space" for a user
-  console.log('Creating a space...');
-  const myVerseSpace = await prisma.space.create({
-  data: {
-    id: "1", // <-- ADD THIS LINE
-    name: "Shubham's First Space",
-    width: 20,
-    height: 15,
-    thumbnail: 'https://placehold.co/400x300/green/white?text=My+Space',
-    creatorId: normalUser.id,
-  },
-});
-
-  // 6. Add elements to the created space
-  console.log('Adding elements to the space...');
-  await prisma.spaceElements.create({
+  // 5. Create a default Map Template
+  console.log('Creating default map template...');
+  const defaultMap = await prisma.map.create({
     data: {
-      spaceId: myVerseSpace.id,
-      elementId: tableElement.id,
-      x: 5,
-      y: 5,
+      name: 'Default Office Room',
+      width: 20,
+      height: 15,
+      thumbnail: 'https://placehold.co/400x300/grey/white?text=Office',
+      mapElements: {
+        create: [
+          { elementId: tableElement.id, x: 5, y: 5 },
+          { elementId: chairElement.id, x: 5, y: 4 },
+        ],
+      },
     },
   });
 
-  await prisma.spaceElements.create({
+  // 6. Create a regular Test User
+  console.log('Creating test user...');
+  const testUser = await prisma.user.create({
     data: {
-      spaceId: myVerseSpace.id,
-      elementId: chairElement.id,
-      x: 5,
-      y: 4,
-    },
-  });
-   await prisma.spaceElements.create({
-    data: {
-      spaceId: myVerseSpace.id,
-      elementId: chairElement.id,
-      x: 6,
-      y: 5,
+      username: 'testuser',
+      password: 'password123',
+      role: Role.User,
+      avatarId: avatar2.id, // Assign a default avatar
     },
   });
 
-  console.log('✅ Seeding finished.');
+  console.log('✅ Database seeded successfully!');
 }
-
-
 
 main()
   .catch((e) => {

@@ -47,6 +47,6 @@ export class RoomManager{
         console.log("Remove User");
         if(!this.rooms.has(spaceId)) return;
 
-        this.rooms.set(spaceId, (this.rooms.get(spaceId)?.filter(u => u.id === user.id)) ?? []);
+        this.rooms.set(spaceId, (this.rooms.get(spaceId)?.filter(u => u.id !== user.id)) ?? []);
     }
 }

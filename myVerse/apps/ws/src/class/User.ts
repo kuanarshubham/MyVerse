@@ -24,7 +24,7 @@ export class User {
 
     constructor(private ws: WebSocket) {
         this.id = getRandomString(10);
-        this.x =  0;
+        this.x = 0;
         this.y = 0;
         console.log("User formed");
         this.initHandlers();
@@ -120,17 +120,25 @@ export class User {
 
                         return;
                     }
-                    else{
+                    else {
                         this.send({
-                        type: "movement-rejected",
-                        payload: {
-                            x: this.x,
-                            y: this.y
-                        }
+                            type: "movement-rejected",
+                            payload: {
+                                x: this.x,
+                                y: this.y
+                            }
                         });
                     }
-
                 }
+
+                    break;
+
+                case "ping": {
+                    this.send({
+                        type: "pong"
+                    });
+                }
+                    break;
             }
 
 

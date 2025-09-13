@@ -53,6 +53,7 @@ model Element {
   width                    Int
   height                   Int
   imageUrl                 String
+  static                   Boolean? @default(false) 
 
   space                    spaceElements []
 

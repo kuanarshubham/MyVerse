@@ -1,39 +1,3 @@
-import { extend, useTick } from "@pixi/react"
-import { Container, Sprite } from "pixi.js"
-import type { Texture } from "pixi.js";
-extend({
-    Container, Sprite
-});
-import { useCallback, useRef } from "react";
-
-
-import type { PropsWithChildren } from 'react'
-import {
-  ANIMATION_SPEED,
-  MOVE_SPEED,
-} from '../../utils/constants.utils'
-import { usePeopleControl } from '../helpers/usePeopleControls'
-import {
-  calculateNewTarget,
-  checkCanMove,
-  handleMovement,
-} from "../helpers/moving";
-import { usePeopleAnimation,  } from './usePeopleAnimation'
-import type { Direction } from "../types/common";
-
-// import { useAppDispatch } from '../../store/hooks';
-// import { setNewPosition } from "@/feature/people.Slice";
-
-import type { IPosition } from "../types/common";
-
-import { TILE_SIZE } from "../../utils/constants.utils";
-
-interface IHeroProps {
-  texture: Texture
-  initialPosition: IPosition;
-  onMove: (gridX: number, gridY: number) => void
-}
-
 // const People = ({ texture, initialPosition, onMove }: PropsWithChildren<IHeroProps>) => {
 //   //redux
 //   const dispatch = useAppDispatch();
@@ -128,7 +92,46 @@ interface IHeroProps {
 // export default People
 
 
-const People = ({ texture, initialPosition, onMove }: PropsWithChildren<IHeroProps>) => {
+
+
+
+import { extend, useTick } from "@pixi/react"
+import { Container, Sprite } from "pixi.js"
+import type { Texture } from "pixi.js";
+extend({
+    Container, Sprite
+});
+import { useCallback, useRef } from "react";
+
+
+import type { PropsWithChildren } from 'react'
+import {
+  ANIMATION_SPEED,
+  MOVE_SPEED,
+} from '../../utils/constants.utils'
+import { usePeopleControl } from '../helpers/usePeopleControls'
+import {
+  calculateNewTarget,
+  checkCanMove,
+  handleMovement,
+} from "../helpers/moving";
+import { usePeopleAnimation,  } from './usePeopleAnimation'
+import type { Direction } from "../types/common";
+
+import type { IPosition } from "../types/common";
+import { TILE_SIZE } from "../../utils/constants.utils";
+
+// CHANGE: Update the props interface to accept the dynamic map
+interface IHeroProps {
+  texture: Texture;
+  initialPosition: IPosition;
+  onMove: (gridX: number, gridY: number) => void;
+  collisionMap: number[];
+  mapWidth: number;
+}
+
+// CHANGE: Update the component's function signature to receive the new props
+const People = ({ texture, initialPosition, onMove, collisionMap, mapWidth }: PropsWithChildren<IHeroProps>) => {
   // position moving in direction
   const position = useRef({ x: initialPosition.x * TILE_SIZE, y: initialPosition.y * TILE_SIZE });
 
@@ -146,10 +149,11 @@ const People = ({ texture, initialPosition, onMove }: PropsWithChildren<IHeroPro
     currentDirection.current = direction
     const newTarget = calculateNewTarget(x, y, direction)
 
-    if (checkCanMove(newTarget)) {
+    // CHANGE: Pass the dynamic map data to the checkCanMove function
+    if (checkCanMove(newTarget, collisionMap, mapWidth)) {
       targetPosition.current = newTarget
     }
-  }, []);
+  }, [collisionMap, mapWidth]); // CHANGE: Add the new props to the dependency array
 
   const { sprite, updateSprite } = usePeopleAnimation({
         texture,
@@ -186,7 +190,6 @@ const People = ({ texture, initialPosition, onMove }: PropsWithChildren<IHeroPro
 
     updateSprite(currentDirection.current, isMoving.current)
   });
-
 
   return (
     <pixiContainer>

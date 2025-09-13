@@ -162,6 +162,7 @@ const Navbar = () => {
                             onMouseEnter={() => dispatch(setNavBtn1({type: "outline"}))}
                             onMouseLeave={() => dispatch(setNavBtn1({type: "default"}))}
                             style={{ transition: 'all 0.5s ease-in-out' }}
+                            onClick={() => navigate('/profile')}
                         >
                             Profile
                         </RainbowButton>

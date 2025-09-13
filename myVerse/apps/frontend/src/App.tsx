@@ -7,6 +7,7 @@ import Space from "./game-engine/components/Space";
 import store from './store/store'
 import { Provider } from 'react-redux'
 import "./assets/fonts/font.css";
+import UserInfo from "./pages/UserInfo";
 
 
 
@@ -20,6 +21,10 @@ const App = () => {
                 {
                     path: "",
                     Component: Home
+                },
+                {
+                    path: "profile", // <-- ADD THIS ROUTE
+                    Component: UserInfo
                 },
                 {
                     path: "space/:spaceId",
